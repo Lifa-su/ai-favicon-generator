@@ -3,598 +3,500 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Favicon Generator - Create Beautiful Favicons Instantly</title>
-<meta name="description" content="Generate beautiful favicons from text, emoji, or initials. Export as ICO and PNG in multiple sizes. Free, fast, no signup required.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<title>AI Favicon Generator - Create Custom Favicons Online</title>
+<meta name="description" content="Free online favicon generator. Create custom favicons from text or emoji with customizable colors, shapes, and sizes. Export as ICO or PNG.">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0a0f;--surface:#13131a;--surface2:#1a1a24;--surface3:#22222e;
-  --border:#2a2a3a;--border-hover:#3a3a50;
-  --text:#e8e8f0;--text2:#9898a8;--text3:#686878;
-  --accent:#6c5ce7;--accent-hover:#7c6cf7;--accent-glow:rgba(108,92,231,0.15);
-  --success:#00b894;--danger:#e17055;
-  --radius:12px;--radius-sm:8px;--radius-lg:16px;
-  --shadow:0 4px 24px rgba(0,0,0,0.3);
-  --transition:0.2s ease;
-}
-html{font-size:16px;-webkit-font-smoothing:antialiased}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  background:var(--bg);color:var(--text);min-height:100vh;
-  display:flex;flex-direction:column;line-height:1.5;
-}
-a{color:var(--accent);text-decoration:none}
-a:hover{color:var(--accent-hover)}
-
-/* Header */
-.header{
-  text-align:center;padding:2.5rem 1rem 1.5rem;
-  background:linear-gradient(180deg,rgba(108,92,231,0.08) 0%,transparent 100%);
-}
-.header h1{
-  font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;
-  background:linear-gradient(135deg,#e8e8f0 0%,#6c5ce7 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.header p{color:var(--text2);margin-top:0.4rem;font-size:0.95rem}
-
-/* Main Layout */
-.main{
-  flex:1;max-width:960px;width:100%;margin:0 auto;
-  padding:0 1rem 3rem;
-  display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;
-  align-items:start;
-}
-
-/* Card */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius-lg);padding:1.5rem;
-}
-.card-title{
-  font-size:1rem;font-weight:600;margin-bottom:1.25rem;
-  display:flex;align-items:center;gap:0.5rem;
-}
-.card-title .icon{font-size:1.1rem}
-
-/* Form Controls */
-.field{margin-bottom:1.1rem}
-.field:last-child{margin-bottom:0}
-.field label{
-  display:block;font-size:0.8rem;font-weight:500;
-  color:var(--text2);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.05em;
-}
-.field input[type="text"],
-.field select{
-  width:100%;padding:0.65rem 0.85rem;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:var(--radius-sm);color:var(--text);font-size:0.95rem;
-  transition:border-color var(--transition);outline:none;
-}
-.field input[type="text"]:focus,
-.field select:focus{border-color:var(--accent)}
-.field input[type="text"]::placeholder{color:var(--text3)}
-.field select{cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%239898a8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 0.75rem center;
-  padding-right:2rem;
-}
-.field select option{background:var(--surface2);color:var(--text)}
-
-/* Color Picker Row */
-.color-row{display:flex;align-items:center;gap:0.75rem}
-.color-input-wrap{
-  position:relative;width:40px;height:40px;border-radius:var(--radius-sm);
-  overflow:hidden;border:2px solid var(--border);flex-shrink:0;
-}
-.color-input-wrap input[type="color"]{
-  position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);
-  border:none;cursor:pointer;background:none;
-}
-.color-presets{display:flex;gap:0.4rem;flex-wrap:wrap}
-.color-preset{
-  width:28px;height:28px;border-radius:6px;border:2px solid transparent;
-  cursor:pointer;transition:all var(--transition);flex-shrink:0;
-}
-.color-preset:hover{transform:scale(1.15);border-color:rgba(255,255,255,0.3)}
-.color-preset.active{border-color:#fff;transform:scale(1.15)}
-
-/* Font Size Slider */
-.slider-row{display:flex;align-items:center;gap:0.75rem}
-.slider-row input[type="range"]{
-  flex:1;-webkit-appearance:none;appearance:none;height:6px;
-  background:var(--surface3);border-radius:3px;outline:none;
-}
-.slider-row input[type="range"]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
-  background:var(--accent);cursor:pointer;border:2px solid var(--surface);
-  box-shadow:0 2px 6px rgba(108,92,231,0.4);
-}
-.slider-row .slider-val{
-  font-size:0.8rem;color:var(--text2);min-width:2.5rem;text-align:right;
-  font-variant-numeric:tabular-nums;
-}
-
-/* Shape Selector */
-.shape-options{display:flex;gap:0.5rem}
-.shape-btn{
-  flex:1;padding:0.55rem;background:var(--surface2);border:2px solid var(--border);
-  border-radius:var(--radius-sm);color:var(--text2);font-size:0.8rem;
-  cursor:pointer;text-align:center;transition:all var(--transition);
-  display:flex;flex-direction:column;align-items:center;gap:0.3rem;
-}
-.shape-btn:hover{border-color:var(--border-hover);color:var(--text)}
-.shape-btn.active{border-color:var(--accent);color:var(--text);background:var(--accent-glow)}
-.shape-icon{width:24px;height:24px;border:2px solid currentColor;display:inline-block}
-.shape-icon.circle{border-radius:50%}
-.shape-icon.square{border-radius:2px}
-.shape-icon.rounded{border-radius:6px}
-
-/* Text Color Toggle */
-.toggle-row{display:flex;gap:0.5rem}
-.toggle-btn{
-  flex:1;padding:0.55rem;background:var(--surface2);border:2px solid var(--border);
-  border-radius:var(--radius-sm);font-size:0.85rem;cursor:pointer;
-  text-align:center;transition:all var(--transition);
-}
-.toggle-btn:hover{border-color:var(--border-hover)}
-.toggle-btn.active{border-color:var(--accent);background:var(--accent-glow)}
-.toggle-btn.light{color:#fff}
-.toggle-btn.dark{color:#222}
-
-/* Preview Area */
-.preview-area{
-  display:flex;flex-direction:column;align-items:center;gap:1.25rem;
-}
-.canvas-wrap{
-  background:var(--surface2);border-radius:var(--radius);
-  padding:1.5rem;display:flex;justify-content:center;align-items:center;
-  border:1px solid var(--border);width:100%;aspect-ratio:1;
-  max-width:280px;
-}
-#preview{image-rendering:pixelated;border-radius:4px;max-width:100%;max-height:100%}
-
-/* Size Previews */
-.size-previews{
-  display:flex;gap:0.75rem;align-items:flex-end;justify-content:center;flex-wrap:wrap;
-}
-.size-preview{
-  display:flex;flex-direction:column;align-items:center;gap:0.3rem;
-}
-.size-preview canvas{border-radius:3px;border:1px solid var(--border)}
-.size-preview span{font-size:0.65rem;color:var(--text3)}
-
-/* Export Buttons */
-.export-section{width:100%}
-.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
-.btn{
-  padding:0.7rem 1rem;border:none;border-radius:var(--radius-sm);
-  font-size:0.85rem;font-weight:600;cursor:pointer;
-  transition:all var(--transition);display:flex;align-items:center;
-  justify-content:center;gap:0.4rem;
-}
-.btn-primary{
-  background:var(--accent);color:#fff;
-  box-shadow:0 2px 12px rgba(108,92,231,0.3);
-}
-.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);
-  box-shadow:0 4px 16px rgba(108,92,231,0.4);
-}
-.btn-secondary{
-  background:var(--surface2);color:var(--text);border:1px solid var(--border);
-}
-.btn-secondary:hover{border-color:var(--border-hover);background:var(--surface3)}
-.btn-full{grid-column:1/-1}
-
-/* Toast */
-.toast{
-  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
-  background:var(--surface3);color:var(--text);padding:0.75rem 1.5rem;
-  border-radius:var(--radius);font-size:0.85rem;opacity:0;
-  transition:all 0.3s ease;z-index:999;border:1px solid var(--border);
-  box-shadow:var(--shadow);
-}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-
-/* Footer */
-.footer{
-  text-align:center;padding:2rem 1rem;color:var(--text3);font-size:0.8rem;
-  border-top:1px solid var(--border);margin-top:auto;
-}
-.footer a{color:var(--text2)}
-
-/* Responsive */
-@media(max-width:700px){
-  .main{grid-template-columns:1fr;max-width:480px}
-  .header h1{font-size:1.4rem}
-  .canvas-wrap{max-width:220px}
-  .export-grid{grid-template-columns:1fr}
+:root{--bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;--surface:#1e2746;--surface2:#253256;--text:#e8e8e8;--text2:#a0a0b8;--accent:#e94560;--accent2:#ff6b6b;--radius:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+a{color:var(--accent2);text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:2.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2),#ffd93d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+header p{color:var(--text2);font-size:1.05rem}
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:30px}
+.panel{background:var(--surface);border-radius:var(--radius);padding:24px;border:1px solid rgba(255,255,255,0.06)}
+.panel h2{font-size:1.1rem;margin-bottom:18px;color:var(--text);display:flex;align-items:center;gap:8px}
+.panel h2 span{font-size:1.3rem}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.85rem;color:var(--text2);margin-bottom:6px;font-weight:500}
+.text-input{width:100%;padding:12px 16px;background:var(--bg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text);font-size:1.8rem;text-align:center;outline:none;transition:border-color 0.2s}
+.text-input:focus{border-color:var(--accent)}
+.text-input::placeholder{color:var(--text2);font-size:1rem}
+.color-row{display:flex;gap:12px}
+.color-row .form-group{flex:1}
+.color-wrap{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:8px;padding:6px 12px;border:1px solid rgba(255,255,255,0.1)}
+.color-wrap input[type=color]{width:36px;height:36px;border:none;border-radius:6px;cursor:pointer;background:none;padding:0}
+.color-wrap input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.color-wrap input[type=color]::-webkit-color-swatch{border:2px solid rgba(255,255,255,0.15);border-radius:4px}
+.color-hex{background:none;border:none;color:var(--text);font-family:monospace;font-size:0.9rem;width:80px;outline:none}
+.slider-wrap{display:flex;align-items:center;gap:12px}
+.slider-wrap input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;background:var(--bg3);border-radius:3px;outline:none}
+.slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid var(--bg)}
+.slider-val{background:var(--bg);padding:4px 10px;border-radius:6px;font-size:0.85rem;min-width:45px;text-align:center;color:var(--accent2);font-weight:600}
+select{width:100%;padding:10px 14px;background:var(--bg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text);font-size:0.95rem;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23a0a0b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select:focus{border-color:var(--accent)}
+.shape-options{display:flex;gap:10px}
+.shape-btn{flex:1;padding:10px;background:var(--bg);border:2px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--text2);cursor:pointer;text-align:center;font-size:0.85rem;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.shape-btn .shape-icon{width:32px;height:32px;border:2px solid currentColor;display:inline-block}
+.shape-btn[data-shape=square] .shape-icon{border-radius:2px}
+.shape-btn[data-shape=rounded] .shape-icon{border-radius:8px}
+.shape-btn[data-shape=circle] .shape-icon{border-radius:50%}
+.shape-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(233,69,96,0.1)}
+.preview-section{display:flex;flex-direction:column;gap:20px}
+.preview-large{display:flex;justify-content:center;align-items:center;min-height:280px;background:var(--bg);border-radius:12px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden}
+.preview-large canvas{image-rendering:pixelated}
+.preview-large .size-label{position:absolute;bottom:10px;right:14px;font-size:0.75rem;color:var(--text2);background:rgba(0,0,0,0.5);padding:2px 8px;border-radius:4px}
+.tab-sim{background:var(--bg);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.06)}
+.tab-sim h3{font-size:0.85rem;color:var(--text2);margin-bottom:12px;font-weight:500}
+.chrome-bar{background:#292b2f;border-radius:10px 10px 0 0;padding:8px 12px 0;overflow:hidden}
+.chrome-tabs{display:flex;align-items:flex-end;gap:0;padding:0}
+.chrome-tab{display:flex;align-items:center;gap:6px;background:#1e2023;padding:8px 14px;border-radius:8px 8px 0 0;font-size:0.8rem;color:#ccc;min-width:140px;max-width:200px;position:relative}
+.chrome-tab.active{background:#35363a}
+.chrome-tab img,.chrome-tab canvas{width:16px;height:16px;border-radius:2px;flex-shrink:0}
+.chrome-tab-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.chrome-tab-close{font-size:14px;color:#888;margin-left:auto;cursor:default}
+.chrome-page{background:#35363a;height:40px;border-radius:0 0 8px 8px}
+.chrome-addr{display:flex;align-items:center;height:100%;padding:0 12px}
+.chrome-addr-bar{background:#292b2f;border-radius:20px;padding:4px 12px;font-size:0.75rem;color:#999;flex:1;text-align:center}
+.export-section{margin-top:0}
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.export-btn{padding:14px 20px;border:none;border-radius:10px;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.export-btn:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.export-btn.ico{background:linear-gradient(135deg,var(--accent),#c0392b);color:#fff}
+.export-btn.png{background:linear-gradient(135deg,var(--bg3),#1a5276);color:#fff}
+.size-checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.size-check{display:flex;align-items:center;gap:4px;font-size:0.82rem;color:var(--text2)}
+.size-check input{accent-color:var(--accent)}
+.size-check label{cursor:pointer}
+.multi-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:10px;margin-top:12px}
+.multi-preview-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.multi-preview-item canvas{image-rendering:pixelated;border:1px solid rgba(255,255,255,0.08);border-radius:4px}
+.multi-preview-item span{font-size:0.7rem;color:var(--text2)}
+footer{text-align:center;padding:30px 20px;color:var(--text2);font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.06);margin-top:20px}
+@media(max-width:768px){
+.main-grid{grid-template-columns:1fr}
+header h1{font-size:1.6rem}
+.export-grid{grid-template-columns:1fr}
+.container{padding:12px}
 }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>🎨 AI Favicon Generator</h1>
-  <p>Create beautiful favicons from text, emoji, or initials</p>
+<header>
+<h1>🎨 AI Favicon Generator</h1>
+<p>Create beautiful favicons from text or emoji — no design skills needed</p>
+</header>
+<div class="container">
+<div class="main-grid">
+<div>
+<div class="panel">
+<h2><span>✏️</span> Customize</h2>
+<div class="form-group">
+<label>Text or Emoji</label>
+<input type="text" id="faviconText" class="text-input" placeholder="Type text or emoji..." value="🔥" maxlength="4">
 </div>
-
-<div class="main">
-  <!-- Left: Controls -->
-  <div class="card">
-    <div class="card-title"><span class="icon">⚙️</span> Settings</div>
-
-    <div class="field">
-      <label>Text / Emoji / Initials</label>
-      <input type="text" id="textInput" placeholder="e.g. 🚀  A  Hi" maxlength="4" value="🎨">
-    </div>
-
-    <div class="field">
-      <label>Font Size</label>
-      <div class="slider-row">
-        <input type="range" id="fontSize" min="20" max="90" value="62">
-        <span class="slider-val" id="fontSizeVal">62%</span>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Font Family</label>
-      <select id="fontFamily">
-        <option value="system-ui, sans-serif">System Default</option>
-        <option value="'Segoe UI Emoji', 'Apple Color Emoji', sans-serif">Emoji Optimized</option>
-        <option value="Georgia, 'Times New Roman', serif">Serif</option>
-        <option value="'Courier New', monospace">Monospace</option>
-        <option value="Impact, 'Arial Black', sans-serif">Impact / Bold</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Text Color</label>
-      <div class="toggle-row">
-        <button class="toggle-btn light active" data-color="#ffffff" onclick="setTextColor('#ffffff',this)">White</button>
-        <button class="toggle-btn dark" data-color="#1a1a2e" onclick="setTextColor('#1a1a2e',this)" style="background:#ccc">Dark</button>
-        <div class="color-input-wrap" style="width:36px;height:36px" title="Custom text color">
-          <input type="color" id="textColorPicker" value="#ffffff">
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Background Color</label>
-      <div class="color-row">
-        <div class="color-input-wrap">
-          <input type="color" id="bgColor" value="#6c5ce7">
-        </div>
-        <div class="color-presets" id="presets"></div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Shape</label>
-      <div class="shape-options">
-        <button class="shape-btn" data-shape="circle" onclick="setShape('circle',this)">
-          <span class="shape-icon circle"></span>Circle
-        </button>
-        <button class="shape-btn active" data-shape="square" onclick="setShape('square',this)">
-          <span class="shape-icon square"></span>Square
-        </button>
-        <button class="shape-btn" data-shape="rounded" onclick="setShape('rounded',this)">
-          <span class="shape-icon rounded"></span>Rounded
-        </button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Font Weight</label>
-      <select id="fontWeight">
-        <option value="400">Regular</option>
-        <option value="600" selected>Semi Bold</option>
-        <option value="700">Bold</option>
-        <option value="900">Black</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Right: Preview & Export -->
-  <div style="display:flex;flex-direction:column;gap:1.5rem">
-    <div class="card">
-      <div class="card-title"><span class="icon">👁️</span> Preview</div>
-      <div class="preview-area">
-        <div class="canvas-wrap">
-          <canvas id="preview" width="512" height="512"></canvas>
-        </div>
-        <div class="size-previews" id="sizePreviews"></div>
-      </div>
-    </div>
-
-    <div class="card export-section">
-      <div class="card-title"><span class="icon">📦</span> Export</div>
-      <div class="export-grid">
-        <button class="btn btn-primary" onclick="exportPNG(512)">PNG 512×512</button>
-        <button class="btn btn-primary" onclick="exportPNG(180)">PNG 180×180</button>
-        <button class="btn btn-secondary" onclick="exportPNG(48)">PNG 48×48</button>
-        <button class="btn btn-secondary" onclick="exportPNG(32)">PNG 32×32</button>
-        <button class="btn btn-secondary" onclick="exportPNG(16)">PNG 16×16</button>
-        <button class="btn btn-secondary" onclick="exportAllPNG()">All PNGs (.zip)</button>
-        <button class="btn btn-primary btn-full" onclick="exportICO()" style="background:linear-gradient(135deg,var(--accent),#e17055)">
-          ⬇️ Download .ICO (multi-size)
-        </button>
-      </div>
-    </div>
-  </div>
+<div class="color-row">
+<div class="form-group">
+<label>Background Color</label>
+<div class="color-wrap">
+<input type="color" id="bgColor" value="#4a90d9">
+<input type="text" class="color-hex" id="bgHex" value="#4a90d9">
 </div>
-
-<div class="toast" id="toast"></div>
-
-<footer class="footer">
-  <p>AI Favicon Generator — Free, open source, no signup required.</p>
-  <p style="margin-top:0.3rem">
-    <a href="https://github.com/Lifa-su/ai-favicon-generator" target="_blank">GitHub</a>
-  </p>
+</div>
+<div class="form-group">
+<label>Font Color</label>
+<div class="color-wrap">
+<input type="color" id="fontColor" value="#ffffff">
+<input type="text" class="color-hex" id="fontHex" value="#ffffff">
+</div>
+</div>
+</div>
+<div class="form-group">
+<label>Font Size</label>
+<div class="slider-wrap">
+<input type="range" id="fontSize" min="20" max="100" value="70">
+<span class="slider-val" id="fontSizeVal">70%</span>
+</div>
+</div>
+<div class="form-group">
+<label>Font Family</label>
+<select id="fontFamily">
+<option value="Arial, sans-serif">Arial</option>
+<option value="Georgia, serif">Georgia</option>
+<option value="'Courier New', monospace">Courier New</option>
+<option value="Impact, sans-serif">Impact</option>
+<option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+<option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+<option value="Verdana, sans-serif">Verdana</option>
+<option value="'Times New Roman', serif">Times New Roman</option>
+</select>
+</div>
+<div class="form-group">
+<label>Shape</label>
+<div class="shape-options">
+<button class="shape-btn active" data-shape="square"><div class="shape-icon"></div>Square</button>
+<button class="shape-btn" data-shape="rounded"><div class="shape-icon"></div>Rounded</button>
+<button class="shape-btn" data-shape="circle"><div class="shape-icon"></div>Circle</button>
+</div>
+</div>
+</div>
+<div class="panel export-section">
+<h2><span>📦</span> Export</h2>
+<div class="form-group">
+<label>PNG Size</label>
+<select id="pngSize">
+<option value="16">16 × 16</option>
+<option value="32">32 × 32</option>
+<option value="48">48 × 48</option>
+<option value="64">64 × 64</option>
+<option value="128" selected>128 × 128</option>
+<option value="256">256 × 256</option>
+</select>
+</div>
+<div class="form-group">
+<label>ICO Sizes (multi-size pack)</label>
+<div class="size-checks">
+<div class="size-check"><input type="checkbox" id="ico16" checked><label for="ico16">16</label></div>
+<div class="size-check"><input type="checkbox" id="ico32" checked><label for="ico32">32</label></div>
+<div class="size-check"><input type="checkbox" id="ico48" checked><label for="ico48">48</label></div>
+<div class="size-check"><input type="checkbox" id="ico64" checked><label for="ico64">64</label></div>
+<div class="size-check"><input type="checkbox" id="ico128" checked><label for="ico128">128</label></div>
+<div class="size-check"><input type="checkbox" id="ico256" checked><label for="ico256">256</label></div>
+</div>
+</div>
+<div class="export-grid">
+<button class="export-btn ico" onclick="exportICO()">⬇️ Download ICO</button>
+<button class="export-btn png" onclick="exportPNG()">⬇️ Download PNG</button>
+</div>
+</div>
+</div>
+<div class="preview-section">
+<div class="panel">
+<h2><span>👁️</span> Preview</h2>
+<div class="preview-large">
+<canvas id="previewCanvas" width="256" height="256"></canvas>
+<div class="size-label">256 × 256</div>
+</div>
+</div>
+<div class="panel tab-sim">
+<h3>🌐 Browser Tab Preview</h3>
+<div class="chrome-bar">
+<div class="chrome-tabs">
+<div class="chrome-tab active">
+<canvas id="tabFavicon" width="16" height="16"></canvas>
+<span class="chrome-tab-title">My Website</span>
+<span class="chrome-tab-close">×</span>
+</div>
+<div class="chrome-tab">
+<span class="chrome-tab-title" style="color:#888">+ New Tab</span>
+</div>
+</div>
+</div>
+<div class="chrome-page">
+<div class="chrome-addr">
+<div class="chrome-addr-bar">🔒 mywebsite.com</div>
+</div>
+</div>
+</div>
+<div class="panel">
+<h2><span>📐</span> All Sizes</h2>
+<div class="multi-preview" id="multiPreview"></div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<p>AI Favicon Generator — Free, open-source, no uploads required. All processing happens in your browser.</p>
 </footer>
-
+<script src="https://alwingulla.com/88/tag.min.js" data-zone="130747" async data-cfasync="false"></script>
 <script>
-(() => {
-  // --- State ---
-  const state = {
-    text: '🎨',
-    bgColor: '#6c5ce7',
-    textColor: '#ffffff',
-    shape: 'square',
-    fontSize: 62,
-    fontFamily: "system-ui, sans-serif",
-    fontWeight: '600',
-  };
+(function(){
+const $ = s => document.querySelector(s);
+const sizes = [16, 32, 48, 64, 128, 256];
+const els = {
+  text: $('#faviconText'),
+  bgColor: $('#bgColor'),
+  bgHex: $('#bgHex'),
+  fontColor: $('#fontColor'),
+  fontHex: $('#fontHex'),
+  fontSize: $('#fontSize'),
+  fontSizeVal: $('#fontSizeVal'),
+  fontFamily: $('#fontFamily'),
+  preview: $('#previewCanvas'),
+  tabFav: $('#tabFavicon'),
+  multi: $('#multiPreview'),
+  pngSize: $('#pngSize')
+};
 
-  const SIZES = [16, 32, 48, 180, 512];
-  const PRESETS = [
-    '#6c5ce7','#0984e3','#00b894','#00cec9','#fdcb6e',
-    '#e17055','#d63031','#e84393','#2d3436','#636e72',
-  ];
-
-  // --- DOM ---
-  const $ = s => document.querySelector(s);
-  const canvas = $('#preview');
-  const ctx = canvas.getContext('2d');
-
-  // --- Init Presets ---
-  const presetsEl = $('#presets');
-  PRESETS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'color-preset' + (c === state.bgColor ? ' active' : '');
-    d.style.background = c;
-    d.setAttribute('role', 'button');
-    d.setAttribute('aria-label', 'Select color ' + c);
-    d.tabIndex = 0;
-    d.onclick = () => {
-      state.bgColor = c;
-      $('#bgColor').value = c;
-      presetsEl.querySelectorAll('.color-preset').forEach(p => p.classList.remove('active'));
-      d.classList.add('active');
-      render();
-    };
-    d.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.click(); } };
-    presetsEl.appendChild(d);
+function hexSync(colorInput, hexInput) {
+  colorInput.addEventListener('input', () => { hexInput.value = colorInput.value; render(); });
+  hexInput.addEventListener('input', () => {
+    let v = hexInput.value;
+    if (/^#?[0-9a-fA-F]{6}$/.test(v)) {
+      if (v[0] !== '#') v = '#' + v;
+      colorInput.value = v; hexInput.value = v; render();
+    }
   });
+  hexInput.addEventListener('blur', () => { hexInput.value = colorInput.value; });
+}
+hexSync(els.bgColor, els.bgHex);
+hexSync(els.fontColor, els.fontHex);
 
-  // --- Init Size Previews ---
-  const sizePreviewsEl = $('#sizePreviews');
-  const previewCanvases = {};
-  [16, 32, 48].forEach(size => {
-    const wrap = document.createElement('div');
-    wrap.className = 'size-preview';
-    const c = document.createElement('canvas');
-    c.width = size; c.height = size;
-    c.style.width = size + 'px'; c.style.height = size + 'px';
-    const span = document.createElement('span');
-    span.textContent = size + 'px';
-    wrap.appendChild(c);
-    wrap.appendChild(span);
-    sizePreviewsEl.appendChild(wrap);
-    previewCanvases[size] = c;
-  });
+els.text.addEventListener('input', render);
+els.fontSize.addEventListener('input', () => { els.fontSizeVal.textContent = els.fontSize.value + '%'; render(); });
+els.fontFamily.addEventListener('change', render);
 
-  // --- Event Listeners ---
-  $('#textInput').addEventListener('input', e => { state.text = e.target.value; render(); });
-  $('#bgColor').addEventListener('input', e => {
-    state.bgColor = e.target.value;
-    presetsEl.querySelectorAll('.color-preset').forEach(p => {
-      p.classList.toggle('active', p.style.background === e.target.value);
-    });
-    render();
-  });
-  $('#fontSize').addEventListener('input', e => {
-    state.fontSize = parseInt(e.target.value);
-    $('#fontSizeVal').textContent = state.fontSize + '%';
-    render();
-  });
-  $('#fontFamily').addEventListener('change', e => { state.fontFamily = e.target.value; render(); });
-  $('#fontWeight').addEventListener('change', e => { state.fontWeight = e.target.value; render(); });
-  $('#textColorPicker').addEventListener('input', e => {
-    state.textColor = e.target.value;
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    render();
-  });
-
-  // --- Shape ---
-  window.setShape = (shape, btn) => {
-    state.shape = shape;
+document.querySelectorAll('.shape-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
     document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     render();
-  };
+  });
+});
 
-  // --- Text Color ---
-  window.setTextColor = (color, btn) => {
-    state.textColor = color;
-    $('#textColorPicker').value = color;
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
-  };
+function getShape() {
+  const active = document.querySelector('.shape-btn.active');
+  return active ? active.dataset.shape : 'square';
+}
 
-  // --- Render ---
-  function drawFavicon(targetCanvas, size) {
-    const c = targetCanvas;
-    c.width = size; c.height = size;
-    const cx = c.getContext('2d');
-    cx.clearRect(0, 0, size, size);
+function drawFavicon(canvas, size) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = size;
+  canvas.height = size;
+  ctx.clearRect(0, 0, size, size);
 
-    // Background shape
-    cx.fillStyle = state.bgColor;
-    if (state.shape === 'circle') {
-      cx.beginPath();
-      cx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-      cx.fill();
-    } else if (state.shape === 'rounded') {
-      const r = size * 0.18;
-      cx.beginPath();
-      cx.roundRect(0, 0, size, size, r);
-      cx.fill();
-    } else {
-      cx.fillRect(0, 0, size, size);
-    }
+  const shape = getShape();
+  const bg = els.bgColor.value;
 
-    // Text
-    if (state.text) {
-      const fSize = Math.round(size * state.fontSize / 100);
-      cx.font = `${state.fontWeight} ${fSize}px ${state.fontFamily}`;
-      cx.fillStyle = state.textColor;
-      cx.textAlign = 'center';
-      cx.textBaseline = 'middle';
-
-      // Slight vertical adjustment for better centering
-      const metrics = cx.measureText(state.text);
-      const actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-      const yOffset = (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
-      cx.fillText(state.text, size / 2, size / 2 + yOffset);
-    }
+  ctx.beginPath();
+  if (shape === 'circle') {
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+  } else if (shape === 'rounded') {
+    const r = size * 0.2;
+    ctx.moveTo(r, 0);
+    ctx.lineTo(size - r, 0);
+    ctx.quadraticCurveTo(size, 0, size, r);
+    ctx.lineTo(size, size - r);
+    ctx.quadraticCurveTo(size, size, size - r, size);
+    ctx.lineTo(r, size);
+    ctx.quadraticCurveTo(0, size, 0, size - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+  } else {
+    ctx.rect(0, 0, size, size);
   }
+  ctx.closePath();
+  ctx.fillStyle = bg;
+  ctx.fill();
 
-  function render() {
-    drawFavicon(canvas, 512);
-    // Update small previews
-    for (const size of [16, 32, 48]) {
-      drawFavicon(previewCanvases[size], size);
-    }
+  ctx.save();
+  ctx.beginPath();
+  if (shape === 'circle') {
+    ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+  } else if (shape === 'rounded') {
+    const r = size * 0.2;
+    ctx.moveTo(r, 0);
+    ctx.lineTo(size - r, 0);
+    ctx.quadraticCurveTo(size, 0, size, r);
+    ctx.lineTo(size, size - r);
+    ctx.quadraticCurveTo(size, size, size - r, size);
+    ctx.lineTo(r, size);
+    ctx.quadraticCurveTo(0, size, 0, size - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+  } else {
+    ctx.rect(0, 0, size, size);
   }
+  ctx.clip();
 
-  // --- Export PNG ---
-  window.exportPNG = (size) => {
+  const text = els.text.value || '?';
+  const fontPct = parseInt(els.fontSize.value) / 100;
+  const fSize = Math.round(size * fontPct);
+  const fontFam = els.fontFamily.value;
+  ctx.font = `bold ${fSize}px ${fontFam}`;
+  ctx.fillStyle = els.fontColor.value;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, size / 2, size / 2 + size * 0.02);
+  ctx.restore();
+}
+
+function render() {
+  drawFavicon(els.preview, 256);
+  drawFavicon(els.tabFav, 16);
+  renderMulti();
+}
+
+function renderMulti() {
+  els.multi.innerHTML = '';
+  sizes.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'multi-preview-item';
     const c = document.createElement('canvas');
-    drawFavicon(c, size);
-    c.toBlob(blob => {
-      downloadBlob(blob, `favicon-${size}x${size}.png`);
-      toast(`Downloaded PNG ${size}×${size}`);
-    }, 'image/png');
-  };
+    const displaySize = Math.max(s, 32);
+    c.style.width = displaySize + 'px';
+    c.style.height = displaySize + 'px';
+    drawFavicon(c, s);
+    div.appendChild(c);
+    const sp = document.createElement('span');
+    sp.textContent = s + '×' + s;
+    div.appendChild(sp);
+    els.multi.appendChild(div);
+  });
+}
 
-  // --- Export All PNGs (as individual downloads) ---
-  window.exportAllPNG = () => {
-    SIZES.forEach((size, i) => {
-      setTimeout(() => {
-        const c = document.createElement('canvas');
-        drawFavicon(c, size);
-        c.toBlob(blob => {
-          downloadBlob(blob, `favicon-${size}x${size}.png`);
-        }, 'image/png');
-      }, i * 200);
-    });
-    toast('Downloading all PNG sizes...');
-  };
+function getCanvasForSize(size) {
+  const c = document.createElement('canvas');
+  drawFavicon(c, size);
+  return c;
+}
 
-  // --- Export ICO ---
-  window.exportICO = () => {
-    const icoSizes = [16, 32, 48];
-    const pngDataArray = [];
-    let done = 0;
+function canvasToBMP(canvas) {
+  const w = canvas.width, h = canvas.height;
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const px = imgData.data;
+  const rowSize = w * 4;
+  const maskRowSize = Math.ceil(w / 8);
+  const maskRowPad = (4 - (maskRowSize % 4)) % 4;
+  const maskSize = (maskRowSize + maskRowPad) * h;
+  const bmpInfoSize = 40;
+  const dataSize = rowSize * h + maskSize;
+  const buf = new ArrayBuffer(bmpInfoSize + dataSize);
+  const view = new DataView(buf);
 
-    icoSizes.forEach((size, idx) => {
-      const c = document.createElement('canvas');
-      drawFavicon(c, size);
-      c.toBlob(blob => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          pngDataArray[idx] = new Uint8Array(reader.result);
-          done++;
-          if (done === icoSizes.length) {
-            const ico = buildICO(pngDataArray, icoSizes);
-            downloadBlob(new Blob([ico], { type: 'image/x-icon' }), 'favicon.ico');
-            toast('Downloaded favicon.ico');
-          }
-        };
-        reader.readAsArrayBuffer(blob);
-      }, 'image/png');
-    });
-  };
+  view.setUint32(0, bmpInfoSize, true);
+  view.setInt32(4, w, true);
+  view.setInt32(8, h * 2, true);
+  view.setUint16(12, 1, true);
+  view.setUint16(14, 32, true);
+  view.setUint32(16, 0, true);
+  view.setUint32(20, dataSize, true);
+  view.setInt32(24, 0, true);
+  view.setInt32(28, 0, true);
+  view.setUint32(32, 0, true);
+  view.setUint32(36, 0, true);
 
-  // --- Build ICO binary ---
-  function buildICO(pngArrays, sizes) {
-    const numImages = pngArrays.length;
-    const headerSize = 6;
-    const dirEntrySize = 16;
-    const dirSize = dirEntrySize * numImages;
-    let dataOffset = headerSize + dirSize;
-
-    const totalSize = dataOffset + pngArrays.reduce((s, a) => s + a.length, 0);
-    const buffer = new ArrayBuffer(totalSize);
-    const view = new DataView(buffer);
-    const bytes = new Uint8Array(buffer);
-
-    // ICO Header
-    view.setUint16(0, 0, true);       // Reserved
-    view.setUint16(2, 1, true);       // Type: 1 = ICO
-    view.setUint16(4, numImages, true); // Number of images
-
-    // Directory entries
-    for (let i = 0; i < numImages; i++) {
-      const offset = headerSize + i * dirEntrySize;
-      const size = sizes[i];
-      const pngData = pngArrays[i];
-
-      view.setUint8(offset, size < 256 ? size : 0);     // Width
-      view.setUint8(offset + 1, size < 256 ? size : 0); // Height
-      view.setUint8(offset + 2, 0);   // Color palette
-      view.setUint8(offset + 3, 0);   // Reserved
-      view.setUint16(offset + 4, 1, true);  // Color planes
-      view.setUint16(offset + 6, 32, true); // Bits per pixel
-      view.setUint32(offset + 8, pngData.length, true);  // Image size
-      view.setUint32(offset + 12, dataOffset, true);     // Image offset
-
-      bytes.set(pngData, dataOffset);
-      dataOffset += pngData.length;
+  let offset = bmpInfoSize;
+  for (let y = h - 1; y >= 0; y--) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      view.setUint8(offset++, px[i + 2]);
+      view.setUint8(offset++, px[i + 1]);
+      view.setUint8(offset++, px[i]);
+      view.setUint8(offset++, px[i + 3]);
     }
-
-    return buffer;
   }
 
-  // --- Download Helper ---
-  function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  for (let y = h - 1; y >= 0; y--) {
+    for (let byteIdx = 0; byteIdx < maskRowSize; byteIdx++) {
+      let byte = 0;
+      for (let bit = 0; bit < 8; bit++) {
+        const x = byteIdx * 8 + bit;
+        if (x < w) {
+          const i = (y * w + x) * 4;
+          if (px[i + 3] === 0) byte |= (128 >> bit);
+        }
+      }
+      view.setUint8(offset++, byte);
+    }
+    for (let p = 0; p < maskRowPad; p++) view.setUint8(offset++, 0);
   }
 
-  // --- Toast ---
-  function toast(msg) {
-    const el = $('#toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    clearTimeout(el._t);
-    el._t = setTimeout(() => el.classList.remove('show'), 2500);
-  }
-  window.toast = toast;
+  return new Uint8Array(buf);
+}
 
-  // --- Initial Render ---
-  render();
+function canvasToPNG(canvas) {
+  const dataUrl = canvas.toDataURL('image/png');
+  const b64 = dataUrl.split(',')[1];
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return arr;
+}
+
+function buildICO(entries) {
+  const headerSize = 6;
+  const dirEntrySize = 16;
+  const dirSize = dirEntrySize * entries.length;
+  let dataOffset = headerSize + dirSize;
+  let totalSize = dataOffset;
+  const images = [];
+
+  entries.forEach(e => {
+    let imgData;
+    if (e.size > 128) {
+      imgData = canvasToPNG(e.canvas);
+    } else {
+      imgData = canvasToBMP(e.canvas);
+    }
+    images.push({ size: e.size, data: imgData, offset: dataOffset });
+    dataOffset += imgData.length;
+    totalSize += imgData.length;
+  });
+
+  const buf = new ArrayBuffer(totalSize);
+  const view = new DataView(buf);
+
+  view.setUint16(0, 0, true);
+  view.setUint16(2, 1, true);
+  view.setUint16(4, entries.length, true);
+
+  images.forEach((img, i) => {
+    const off = 6 + i * 16;
+    view.setUint8(off, img.size >= 256 ? 0 : img.size);
+    view.setUint8(off + 1, img.size >= 256 ? 0 : img.size);
+    view.setUint8(off + 2, 0);
+    view.setUint8(off + 3, 0);
+    view.setUint16(off + 4, 1, true);
+    view.setUint16(off + 6, 32, true);
+    view.setUint32(off + 8, img.data.length, true);
+    view.setUint32(off + 12, img.offset, true);
+  });
+
+  const u8 = new Uint8Array(buf);
+  images.forEach(img => {
+    u8.set(img.data, img.offset);
+  });
+
+  return new Blob([buf], { type: 'image/x-icon' });
+}
+
+function download(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+window.exportICO = function() {
+  const entries = [];
+  const checkboxes = { 16: '#ico16', 32: '#ico32', 48: '#ico48', 64: '#ico64', 128: '#ico128', 256: '#ico256' };
+  for (const [size, sel] of Object.entries(checkboxes)) {
+    if ($(sel).checked) {
+      entries.push({ size: parseInt(size), canvas: getCanvasForSize(parseInt(size)) });
+    }
+  }
+  if (entries.length === 0) { alert('Please select at least one size for ICO export.'); return; }
+  const blob = buildICO(entries);
+  download(blob, 'favicon.ico');
+};
+
+window.exportPNG = function() {
+  const size = parseInt(els.pngSize.value);
+  const canvas = getCanvasForSize(size);
+  canvas.toBlob(blob => {
+    download(blob, `favicon-${size}x${size}.png`);
+  }, 'image/png');
+};
+
+render();
 })();
 </script>
-<script async src="https://cdn.jsdelivr.net/gh/nicepkg/nicepkg.github.io@main/monetize.js"></script>
 </body>
 </html>
