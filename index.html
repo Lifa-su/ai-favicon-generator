@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Favicon 生成器</title>
+<link rel="icon" type="image/png" id="liveFavicon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPj/HwADBwIAMCbHYQAAAABJRU5ErkJggg==">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f0f13;--surface:#1a1a24;--surface2:#24243a;--border:#2e2e4a;--primary:#6c5ce7;--primary-hover:#7c6ef7;--accent:#00cec9;--text:#e8e8f0;--text2:#9090b0;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,.3)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{text-align:center;padding:40px 0 30px}
+header h1{font-size:2rem;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+header p{color:var(--text2);font-size:.95rem}
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px}
+@media(max-width:768px){.main-grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.card h2{font-size:1.1rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 span{font-size:1.3rem}
+label{display:block;font-size:.85rem;color:var(--text2);margin-bottom:6px;margin-top:14px}
+label:first-of-type{margin-top:0}
+input[type="text"],input[type="password"],input[type="number"]{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border .2s}
+input:focus{border-color:var(--primary)}
+.btn{padding:10px 20px;border:none;border-radius:8px;font-size:.9rem;cursor:pointer;transition:all .2s;font-weight:500}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-hover);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--primary)}
+.btn-accent{background:var(--accent);color:#000;font-weight:600}
+.btn-accent:hover{opacity:.9}
+.btn-group{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.mode-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:8px;padding:4px;margin-bottom:16px}
+.mode-tab{flex:1;padding:8px;text-align:center;border-radius:6px;cursor:pointer;font-size:.85rem;transition:all .2s;border:none;background:transparent;color:var(--text2)}
+.mode-tab.active{background:var(--primary);color:#fff}
+.color-row{display:flex;gap:10px;align-items:center;margin-top:14px}
+.color-row label{margin:0;flex-shrink:0}
+input[type="color"]{width:44px;height:36px;border:none;border-radius:6px;cursor:pointer;background:transparent}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:10px;max-height:180px;overflow-y:auto;padding:4px}
+.emoji-item{font-size:1.5rem;text-align:center;padding:6px;border-radius:6px;cursor:pointer;transition:all .15s;border:2px solid transparent}
+.emoji-item:hover{background:var(--surface2)}
+.emoji-item.selected{border-color:var(--primary);background:var(--surface2)}
+.preview-area{display:flex;flex-direction:column;align-items:center;gap:20px}
+.preview-canvas-wrap{position:relative;width:200px;height:200px;background:repeating-conic-gradient(#2a2a3a 0% 25%,#1e1e2e 0% 50%) 50%/20px 20px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;border:2px solid var(--border)}
+#previewCanvas{border-radius:8px}
+.preview-sizes{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.preview-size{text-align:center}
+.preview-size canvas{border:1px solid var(--border);border-radius:4px;image-rendering:pixelated}
+.preview-size span{display:block;font-size:.7rem;color:var(--text2);margin-top:4px}
+.tab-preview{display:flex;align-items:center;gap:8px;background:var(--surface2);border-radius:8px 8px 0 0;padding:8px 16px;margin-top:16px;max-width:260px}
+.tab-preview img{width:16px;height:16px}
+.tab-preview span{font-size:.8rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab-preview .tab-close{margin-left:auto;color:var(--text2);font-size:.7rem;cursor:default}
+.export-section{margin-top:20px}
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.export-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text);font-size:.8rem;transition:all .2s}
+.export-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ai-suggestions{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.ai-chip{padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:.85rem;transition:all .2s}
+.ai-chip:hover{border-color:var(--primary);color:var(--primary)}
+.loading{display:inline-block;width:16px;height:16px;border:2px solid var(--text2);border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.api-toggle{font-size:.8rem;color:var(--text2);cursor:pointer;margin-top:8px;display:inline-block}
+.api-toggle:hover{color:var(--primary)}
+.hidden{display:none}
+.font-size-row{display:flex;gap:10px;align-items:center;margin-top:14px}
+.font-size-row label{margin:0}
+.font-size-row input[type="number"]{width:80px}
+.shape-options{display:flex;gap:8px;margin-top:14px}
+.shape-opt{width:40px;height:40px;border:2px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;background:var(--surface2)}
+.shape-opt:hover,.shape-opt.active{border-color:var(--primary)}
+.shape-opt.circle{border-radius:50%}
+.shape-opt.rounded{border-radius:10px}
+.shape-opt.square{border-radius:2px}
+.status-msg{font-size:.8rem;color:var(--accent);margin-top:8px;min-height:20px}
+select{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🎨 AI Favicon 生成器</h1>
+<p>输入品牌名称，AI 智能推荐图标方案，一键导出多尺寸 Favicon</p>
+</header>
+
+<div class="main-grid">
+<!-- Left: Controls -->
+<div>
+<!-- AI Input -->
+<div class="card">
+<h2><span>🤖</span> AI 智能推荐</h2>
+<label>品牌名称 / 描述</label>
+<input type="text" id="brandInput" placeholder="例如：TechFlow、咖啡小站、My Blog...">
+<div class="btn-group">
+<button class="btn btn-primary" id="aiBtn" onclick="getAISuggestions()">✨ AI 推荐</button>
+</div>
+<div id="aiStatus" class="status-msg"></div>
+<div id="aiSuggestions" class="ai-suggestions"></div>
+<span class="api-toggle" onclick="toggleApiKey()">⚙️ 设置 DeepSeek API Key</span>
+<div id="apiKeyWrap" class="hidden" style="margin-top:8px">
+<input type="password" id="apiKey" placeholder="sk-..." value="">
+<div style="font-size:.75rem;color:var(--text2);margin-top:4px">Key 仅存储在浏览器本地</div>
+</div>
+</div>
+
+<!-- Mode -->
+<div class="card" style="margin-top:20px">
+<h2><span>🎯</span> 图标设置</h2>
+<div class="mode-tabs">
+<button class="mode-tab active" data-mode="text" onclick="setMode('text')">文字图标</button>
+<button class="mode-tab" data-mode="emoji" onclick="setMode('emoji')">Emoji 图标</button>
+</div>
+
+<!-- Text Mode -->
+<div id="textMode">
+<label>显示文字（1-2个字符）</label>
+<input type="text" id="textInput" maxlength="2" value="A" oninput="renderPreview()">
+<label>字体</label>
+<select id="fontSelect" onchange="renderPreview()">
+<option value="Inter, sans-serif">Inter (现代)</option>
+<option value="Georgia, serif">Georgia (衬线)</option>
+<option value="Courier New, monospace">Courier (等宽)</option>
+<option value="Arial Black, sans-serif">Arial Black (粗体)</option>
+<option value="Palatino, serif">Palatino (优雅)</option>
+</select>
+<div class="color-row">
+<label>文字颜色</label>
+<input type="color" id="textColor" value="#ffffff" oninput="renderPreview()">
+<label>背景色</label>
+<input type="color" id="bgColor" value="#6c5ce7" oninput="renderPreview()">
+</div>
+<div class="font-size-row">
+<label>字号比例 %</label>
+<input type="number" id="fontScale" value="60" min="20" max="90" step="5" oninput="renderPreview()">
+</div>
+</div>
+
+<!-- Emoji Mode -->
+<div id="emojiMode" class="hidden">
+<label>选择或输入 Emoji</label>
+<input type="text" id="emojiInput" maxlength="2" placeholder="🚀" oninput="renderPreview()">
+<div class="emoji-grid" id="emojiGrid"></div>
+<div class="color-row">
+<label>背景色</label>
+<input type="color" id="emojiBgColor" value="#1a1a24" oninput="renderPreview()">
+</div>
+</div>
+
+<!-- Shape -->
+<label>形状</label>
+<div class="shape-options">
+<div class="shape-opt circle active" data-shape="circle" onclick="setShape('circle')"><div style="width:20px;height:20px;background:var(--primary);border-radius:50%"></div></div>
+<div class="shape-opt rounded" data-shape="rounded" onclick="setShape('rounded')"><div style="width:20px;height:20px;background:var(--primary);border-radius:5px"></div></div>
+<div class="shape-opt square" data-shape="square" onclick="setShape('square')"><div style="width:20px;height:20px;background:var(--primary);border-radius:1px"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Right: Preview & Export -->
+<div>
+<div class="card">
+<h2><span>👁️</span> 实时预览</h2>
+<div class="preview-area">
+<div class="preview-canvas-wrap">
+<canvas id="previewCanvas" width="200" height="200"></canvas>
+</div>
+<div class="tab-preview">
+<img id="tabPreviewImg" src="" alt="favicon">
+<span id="tabPreviewTitle">My Website</span>
+<span class="tab-close">✕</span>
+</div>
+<div class="preview-sizes" id="previewSizes"></div>
+</div>
+</div>
+
+<div class="card export-section">
+<h2><span>📦</span> 导出</h2>
+<div class="export-grid">
+<div class="export-btn" onclick="exportPNG(16)">📄 PNG 16×16</div>
+<div class="export-btn" onclick="exportPNG(32)">📄 PNG 32×32</div>
+<div class="export-btn" onclick="exportPNG(180)">📄 PNG 180×180</div>
+<div class="export-btn" onclick="exportPNG(512)">📄 PNG 512×512</div>
+<div class="export-btn" onclick="exportAllPNG()">📁 全部 PNG</div>
+<div class="export-btn" onclick="exportICO()">💎 ICO 格式</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// ===== State =====
+const state = {
+  mode: 'text',
+  shape: 'circle',
+  text: 'A',
+  textColor: '#ffffff',
+  bgColor: '#6c5ce7',
+  font: 'Inter, sans-serif',
+  fontScale: 60,
+  emoji: '🚀',
+  emojiBgColor: '#1a1a24'
+};
+
+const EMOJIS = ['🚀','💡','🎯','🔥','⚡','💎','🌟','✨','🎨','🎵','📱','💻','🌍','🏠','☕','🍕','📚','🎮','🛒','💰','❤️','🌈','🍀','🐱','🐶','🦊','🐼','🦁','🌸','🌺','🍎','🍊','⭐','🔮','🎪','🎭','🏆','🎲','🧩','🔑'];
+
+// ===== Init =====
+function init() {
+  const savedKey = localStorage.getItem('deepseek_api_key');
+  if (savedKey) document.getElementById('apiKey').value = savedKey;
+
+  const grid = document.getElementById('emojiGrid');
+  EMOJIS.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'emoji-item';
+    div.textContent = e;
+    div.onclick = () => selectEmoji(e);
+    grid.appendChild(div);
+  });
+
+  renderPreview();
+}
+
+// ===== Mode & Shape =====
+function setMode(mode) {
+  state.mode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  document.getElementById('textMode').classList.toggle('hidden', mode !== 'text');
+  document.getElementById('emojiMode').classList.toggle('hidden', mode !== 'emoji');
+  renderPreview();
+}
+
+function setShape(shape) {
+  state.shape = shape;
+  document.querySelectorAll('.shape-opt').forEach(s => s.classList.toggle('active', s.dataset.shape === shape));
+  renderPreview();
+}
+
+function selectEmoji(emoji) {
+  state.emoji = emoji;
+  document.getElementById('emojiInput').value = emoji;
+  document.querySelectorAll('.emoji-item').forEach(el => el.classList.toggle('selected', el.textContent === emoji));
+  renderPreview();
+}
+
+// ===== Canvas Rendering =====
+function renderToCanvas(canvas, size) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = size;
+  canvas.height = size;
+  ctx.clearRect(0, 0, size, size);
+
+  // Read current values
+  const bgColor = state.mode === 'text'
+    ? document.getElementById('bgColor').value
+    : document.getElementById('emojiBgColor').value;
+
+  // Draw shape background
+  ctx.fillStyle = bgColor;
+  const r = size;
+  if (state.shape === 'circle') {
+    ctx.beginPath();
+    ctx.arc(r/2, r/2, r/2, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (state.shape === 'rounded') {
+    const rad = r * 0.18;
+    ctx.beginPath();
+    ctx.moveTo(rad, 0);
+    ctx.lineTo(r - rad, 0);
+    ctx.quadraticCurveTo(r, 0, r, rad);
+    ctx.lineTo(r, r - rad);
+    ctx.quadraticCurveTo(r, r, r - rad, r);
+    ctx.lineTo(rad, r);
+    ctx.quadraticCurveTo(0, r, 0, r - rad);
+    ctx.lineTo(0, rad);
+    ctx.quadraticCurveTo(0, 0, rad, 0);
+    ctx.fill();
+  } else {
+    ctx.fillRect(0, 0, r, r);
+  }
+
+  if (state.mode === 'text') {
+    const text = document.getElementById('textInput').value || 'A';
+    const color = document.getElementById('textColor').value;
+    const font = document.getElementById('fontSelect').value;
+    const scale = parseInt(document.getElementById('fontScale').value) || 60;
+    const fontSize = size * (scale / 100);
+
+    ctx.fillStyle = color;
+    ctx.font = `bold ${fontSize}px ${font}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, size/2, size/2 + size*0.02);
+  } else {
+    const emoji = document.getElementById('emojiInput').value || '🚀';
+    const fontSize = size * 0.65;
+    ctx.font = `${fontSize}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emoji, size/2, size/2 + size*0.03);
+  }
+
+  return canvas;
+}
+
+function renderPreview() {
+  // Main preview
+  const mainCanvas = document.getElementById('previewCanvas');
+  renderToCanvas(mainCanvas, 200);
+
+  // Size previews
+  const sizes = [16, 32, 48, 64];
+  const container = document.getElementById('previewSizes');
+  container.innerHTML = '';
+  sizes.forEach(s => {
+    const wrap = document.createElement('div');
+    wrap.className = 'preview-size';
+    const c = document.createElement('canvas');
+    renderToCanvas(c, s);
+    const label = document.createElement('span');
+    label.textContent = `${s}×${s}`;
+    wrap.appendChild(c);
+    wrap.appendChild(label);
+    container.appendChild(wrap);
+  });
+
+  // Tab preview & live favicon
+  const tabCanvas = document.createElement('canvas');
+  renderToCanvas(tabCanvas, 32);
+  const dataUrl = tabCanvas.toDataURL('image/png');
+  document.getElementById('tabPreviewImg').src = dataUrl;
+  document.getElementById('liveFavicon').href = dataUrl;
+
+  const brand = document.getElementById('brandInput').value;
+  document.getElementById('tabPreviewTitle').textContent = brand || 'My Website';
+}
+
+// ===== AI Suggestions =====
+function toggleApiKey() {
+  const wrap = document.getElementById('apiKeyWrap');
+  wrap.classList.toggle('hidden');
+}
+
+async function getAISuggestions() {
+  const brand = document.getElementById('brandInput').value.trim();
+  if (!brand) { document.getElementById('aiStatus').textContent = '请先输入品牌名称'; return; }
+
+  let apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) {
+    document.getElementById('apiKeyWrap').classList.remove('hidden');
+    document.getElementById('aiStatus').textContent = '请先设置 DeepSeek API Key';
+    return;
+  }
+  localStorage.setItem('deepseek_api_key', apiKey);
+
+  const btn = document.getElementById('aiBtn');
+  btn.disabled = true;
+  document.getElementById('aiStatus').innerHTML = '正在生成推荐方案...<span class="loading"></span>';
+  document.getElementById('aiSuggestions').innerHTML = '';
+
+  const prompt = `你是一个品牌设计专家。用户的品牌名称/描述是："${brand}"。
+请推荐5个favicon图标方案，每个方案包含：
+1. 一个最能代表该品牌的emoji
+2. 一个推荐的背景色（hex格式）
+3. 推荐的文字（1-2个字符，通常是品牌首字母）
+4. 文字颜色（hex格式）
+
+严格按以下JSON格式返回，不要有其他文字：
+[{"emoji":"🚀","bgColor":"#6c5ce7","text":"T","textColor":"#ffffff","label":"方案描述"}]`;
+
+  try {
+    const resp = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.8,
+        max_tokens: 800
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.text();
+      throw new Error(`API 错误 (${resp.status}): ${err}`);
+    }
+
+    const data = await resp.json();
+    const content = data.choices[0].message.content.trim();
+
+    // Extract JSON from response
+    let suggestions;
+    const jsonMatch = content.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      suggestions = JSON.parse(jsonMatch[0]);
+    } else {
+      throw new Error('AI 返回格式异常');
+    }
+
+    document.getElementById('aiStatus').textContent = `✅ 已生成 ${suggestions.length} 个方案`;
+    const container = document.getElementById('aiSuggestions');
+    container.innerHTML = '';
+
+    suggestions.forEach((s, i) => {
+      // Emoji chip
+      const emojiChip = document.createElement('span');
+      emojiChip.className = 'ai-chip';
+      emojiChip.textContent = `${s.emoji} Emoji`;
+      emojiChip.title = s.label || '';
+      emojiChip.onclick = () => {
+        setMode('emoji');
+        selectEmoji(s.emoji);
+        document.getElementById('emojiBgColor').value = s.bgColor;
+        renderPreview();
+      };
+      container.appendChild(emojiChip);
+
+      // Text chip
+      const textChip = document.createElement('span');
+      textChip.className = 'ai-chip';
+      textChip.innerHTML = `<span style="display:inline-block;width:18px;height:18px;background:${s.bgColor};color:${s.textColor};border-radius:4px;text-align:center;line-height:18px;font-size:11px;font-weight:bold;vertical-align:middle;margin-right:4px">${s.text}</span> 文字`;
+      textChip.title = s.label || '';
+      textChip.onclick = () => {
+        setMode('text');
+        document.getElementById('textInput').value = s.text;
+        document.getElementById('bgColor').value = s.bgColor;
+        document.getElementById('textColor').value = s.textColor;
+        renderPreview();
+      };
+      container.appendChild(textChip);
+    });
+
+  } catch (e) {
+    document.getElementById('aiStatus').textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ===== Export =====
+function exportPNG(size) {
+  const c = document.createElement('canvas');
+  renderToCanvas(c, size);
+  const link = document.createElement('a');
+  link.download = `favicon-${size}x${size}.png`;
+  link.href = c.toDataURL('image/png');
+  link.click();
+}
+
+function exportAllPNG() {
+  [16, 32, 180, 512].forEach((size, i) => {
+    setTimeout(() => exportPNG(size), i * 200);
+  });
+}
+
+function exportICO() {
+  // Generate ICO file (contains 16x16 and 32x32)
+  const sizes = [16, 32];
+  const images = sizes.map(size => {
+    const c = document.createElement('canvas');
+    renderToCanvas(c, size);
+    return { size, canvas: c };
+  });
+
+  // ICO format: header + directory entries + image data
+  const pngDatas = images.map(img => {
+    const dataUrl = img.canvas.toDataURL('image/png');
+    const base64 = dataUrl.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return { size: img.size, data: bytes };
+  });
+
+  // Calculate total size
+  const headerSize = 6;
+  const dirEntrySize = 16;
+  const dirSize = dirEntrySize * pngDatas.length;
+  let offset = headerSize + dirSize;
+
+  const totalSize = offset + pngDatas.reduce((sum, p) => sum + p.data.length, 0);
+  const ico = new ArrayBuffer(totalSize);
+  const view = new DataView(ico);
+
+  // Header
+  view.setUint16(0, 0, true); // reserved
+  view.setUint16(2, 1, true); // type: ICO
+  view.setUint16(4, pngDatas.length, true); // count
+
+  // Directory entries
+  pngDatas.forEach((png, i) => {
+    const pos = headerSize + i * dirEntrySize;
+    view.setUint8(pos, png.size < 256 ? png.size : 0); // width
+    view.setUint8(pos + 1, png.size < 256 ? png.size : 0); // height
+    view.setUint8(pos + 2, 0); // color palette
+    view.setUint8(pos + 3, 0); // reserved
+    view.setUint16(pos + 4, 1, true); // color planes
+    view.setUint16(pos + 6, 32, true); // bits per pixel
+    view.setUint32(pos + 8, png.data.length, true); // size
+    view.setUint32(pos + 12, offset, true); // offset
+    offset += png.data.length;
+  });
+
+  // Image data
+  let dataOffset = headerSize + dirSize;
+  pngDatas.forEach(png => {
+    const arr = new Uint8Array(ico, dataOffset, png.data.length);
+    arr.set(png.data);
+    dataOffset += png.data.length;
+  });
+
+  const blob = new Blob([ico], { type: 'image/x-icon' });
+  const link = document.createElement('a');
+  link.download = 'favicon.ico';
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+// ===== Start =====
+init();
+</script>
+</body>
+</html>
